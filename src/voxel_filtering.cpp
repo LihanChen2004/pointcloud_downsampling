@@ -51,6 +51,7 @@ namespace pointcloud_downsampling
     {
         msg.header.frame_id = "livox_frame";
         msg.header.stamp = get_clock()->now();
+        msg.is_dense = true;
         pointcloud_pub_->publish(msg);
     }
 
