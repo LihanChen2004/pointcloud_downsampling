@@ -6,9 +6,9 @@
 
 namespace pointcloud_downsampling
 {
-    std::string subscribed_topic, published_topic, pub_cloud_frame;
-    float leaf_size_x, leaf_size_y, leaf_size_z;
-    bool downsample_all_data;
+    std::string SUBSCRIBED_TOPIC, PUBLISHED_TOPIC, PUB_CLOUD_FRAME;
+    float LEAF_SIZE_X, LEAF_SIZE_Y, LEAF_SIZE_Z;
+    bool DOWNSAMPLE_ALL_DATA;
 
     PointcloudDownsampling::PointcloudDownsampling(const rclcpp::NodeOptions &options)
         : Node("pointcloud_downsampling", options)
@@ -16,11 +16,11 @@ namespace pointcloud_downsampling
         RCLCPP_INFO(get_logger(), "Start PointcloudDownsampling!");
 
         getParams();
-        
-        pointcloud_pub_ = create_publisher<sensor_msgs::msg::PointCloud2>(published_topic, 10);
+
+        pointcloud_pub_ = create_publisher<sensor_msgs::msg::PointCloud2>(PUBLISHED_TOPIC, 10);
 
         pointcloud_sub_ = this->create_subscription<sensor_msgs::msg::PointCloud2>(
-            subscribed_topic, rclcpp::SensorDataQoS(),
+            SUBSCRIBED_TOPIC, rclcpp::SensorDataQoS(),
             std::bind(&PointcloudDownsampling::voxelFiltering, this, std::placeholders::_1));
     }
 
@@ -36,8 +36,8 @@ namespace pointcloud_downsampling
         // Voxel filtering
         pcl::ApproximateVoxelGrid<pcl::PointXYZI> sor;
         sor.setInputCloud(pcl_cloud);
-        sor.setLeafSize(leaf_size_x, leaf_size_y, leaf_size_z);
-        sor.setDownsampleAllData(downsample_all_data);
+        sor.setLeafSize(LEAF_SIZE_X, LEAF_SIZE_Y, LEAF_SIZE_Z);
+        sor.setDownsampleAllData(DOWNSAMPLE_ALL_DATA);
         sor.filter(*pcl_cloud_filtered);
 
         sensor_msgs::msg::PointCloud2 ros2_cloud_filtered;
@@ -65,22 +65,22 @@ namespace pointcloud_downsampling
         declare_parameter<float>("leaf_size_z", 0.2);
         declare_parameter<bool>("downsample_all_data", false);
 
-        get_parameter_or<std::string>("sub_topic", subscribed_topic, "/cloud_registered_body");
-        get_parameter_or<std::string>("pub_topic", published_topic, "/cloud_registered_body_downsampling");
-        get_parameter_or<std::string>("pub_cloud_frame", pub_cloud_frame, "livox_frame");
-        get_parameter_or<float>("leaf_size_x", leaf_size_x, 0.2);
-        get_parameter_or<float>("leaf_size_y", leaf_size_y, 0.2);
-        get_parameter_or<float>("leaf_size_z", leaf_size_z, 0.2);
-        get_parameter_or<bool>("downsample_all_data", downsample_all_data, false);
+        get_parameter_or<std::string>("sub_topic", SUBSCRIBED_TOPIC, "/cloud_registered_body");
+        get_parameter_or<std::string>("pub_topic", PUBLISHED_TOPIC, "/cloud_registered_body_downsampling");
+        get_parameter_or<std::string>("pub_cloud_frame", PUB_CLOUD_FRAME, "livox_frame");
+        get_parameter_or<float>("leaf_size_x", LEAF_SIZE_X, 0.2);
+        get_parameter_or<float>("leaf_size_y", LEAF_SIZE_Y, 0.2);
+        get_parameter_or<float>("leaf_size_z", LEAF_SIZE_Z, 0.2);
+        get_parameter_or<bool>("downsample_all_data", DOWNSAMPLE_ALL_DATA, false);
 
-        RCLCPP_INFO(this->get_logger(), "subscribed_topic %s", subscribed_topic.c_str());
-        RCLCPP_INFO(this->get_logger(), "published_topic %s", published_topic.c_str());
-        RCLCPP_INFO(this->get_logger(), "leaf_size_x %f", leaf_size_x);
-        RCLCPP_INFO(this->get_logger(), "leaf_size_y %f", leaf_size_y);
-        RCLCPP_INFO(this->get_logger(), "leaf_size_z %f", leaf_size_z);
-        RCLCPP_INFO(this->get_logger(), "downsample_all_data %s", downsample_all_data ? "true" : "false");
+        RCLCPP_INFO(this->get_logger(), "subscribed_topic %s", SUBSCRIBED_TOPIC.c_str());
+        RCLCPP_INFO(this->get_logger(), "published_topic %s", PUBLISHED_TOPIC.c_str());
+        RCLCPP_INFO(this->get_logger(), "leaf_size_x %f", LEAF_SIZE_X);
+        RCLCPP_INFO(this->get_logger(), "leaf_size_y %f", LEAF_SIZE_Y);
+        RCLCPP_INFO(this->get_logger(), "leaf_size_z %f", LEAF_SIZE_Z);
+        RCLCPP_INFO(this->get_logger(), "downsample_all_data %s", DOWNSAMPLE_ALL_DATA ? "true" : "false");
     }
-}
+}  // namespace pointcloud_downsampling
 
 #include "rclcpp_components/register_node_macro.hpp"
 RCLCPP_COMPONENTS_REGISTER_NODE(pointcloud_downsampling::PointcloudDownsampling)
