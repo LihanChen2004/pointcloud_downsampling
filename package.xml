@@ -4,9 +4,9 @@
   <name>pointcloud_downsampling</name>
   <version>1.0.0</version>
   <description>Downsampling pointcloud2 using voxel viltering</description>
-  <maintainer email="1120220476@smbu.edu.cn">Lihan Chen</maintainer>
+  <maintainer email="lihanchen2004@163.com">Lihan Chen</maintainer>
   <license>MIT</license>
-  <author email="1120220476@smbu.edu.cn">Lihan Chen</author>
+  <author email="lihanchen2004@163.com">Lihan Chen</author>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
